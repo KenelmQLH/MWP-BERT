@@ -307,25 +307,23 @@ if __name__=='__main__':
 
     args = parser.parse_args()
 
-    data_name = "mawps"
+    data_name = "arithmetic"
 
+    # args.data_dir = "data"
+    args.data_dir = f"data/{data_name}/97"
     args.output_dir = f"output/mwp-bert-en-{data_name}"
     # args.bert_pretrain_path = "pretrained_models/bert-base-uncased"
     args.bert_pretrain_path = "pretrained_models/mwp-bert-en"
-
     # args.model_reload_path = "output/mwp-bert-en3/epoch_91"
-
+    
     RADIT = 4
 
-    # args.data_dir = "data"
     # args.train_file = "MathQA_bert_token_train.json"
     # args.finetune_from_trainset = "MathQA_bert_token_train.json"
     # args.dev_file = "MathQA_bert_token_val.json"
     # args.test_file = "MathQA_bert_token_test.json"
     
-    args.data_dir = f"/data/qlh/Math-Plan/data/linear_expression/{data_name}/7"
     args.train_file = f"{data_name}_train_mwp_format.json"
-    args.finetune_from_trainset = "/data/qlh/Math-dev/model/mwp_answer/MWP-BERT-main/Fine-tuning/MathQA/data/MathQA_bert_token_train.json"
     args.dev_file = f"{data_name}_valid_mwp_format.json"
     args.test_file = f"{data_name}_test_mwp_format.json"
 
