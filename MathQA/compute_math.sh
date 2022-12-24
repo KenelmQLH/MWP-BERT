@@ -6,7 +6,7 @@ data_version=$3 # 97
 
 
 CRTDIR=$(pwd)
-gold_data_file=/data/qlh/Math-Plan/data/linear_expression/${data_name}/${data_version}/${data_name}_test_mwp_format.json
+gold_data_file=${CRTDIR}/data/${data_name}/${data_version}/${data_name}_test_mwp_format.json
 
 cd tools
 
