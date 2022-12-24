@@ -186,15 +186,16 @@ if __name__=='__main__':
     for arg in vars(args):
         logger.info('{}: {}'.format(arg, getattr(args, arg)))
     
-    data_name = args.data_name
+    data_name = "arithmetic"
+    data_version = 97
 
+    args.data_dir = f"data/{data_name}/{data_version}"
+    args.output_dir = f"output/mwp-bert-en-{data_name}-{data_version}"
     args.bert_pretrain_path = "pretrained_models/mwp-bert-en"
-    args.output_dir = f"output/mwp-bert-en-{data_name}"
     args.model_reload_path = f"output/mwp-bert-en-{data_name}/epoch_best"
-    args.data_dir = f"data/linear_expression/{data_name}/7"
+
     args.train_file = f"{data_name}_train_mwp_format.json"
     args.dev_file = f"{data_name}_valid_mwp_format.json"
-
     # args.test_file = "/data/qlh/Math-Plan/output/planning1212_g7/{data_name}/version_0/checkpoints/infer_valid_mwp_format.json"
 
 

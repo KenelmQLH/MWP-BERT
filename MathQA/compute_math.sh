@@ -1,10 +1,12 @@
 #!/bin/bash
 
 pred_data_dir=$1
-data_name=$2
-# arithmetic
+data_name=$2 # arithmetic
+data_version=$3 # 97
 
-gold_data_file=/data/qlh/Math-Plan/data/linear_expression/${data_name}/97/${data_name}_test_mwp_format.json
+
+CRTDIR=$(pwd)
+gold_data_file=/data/qlh/Math-Plan/data/linear_expression/${data_name}/${data_version}/${data_name}_test_mwp_format.json
 
 cd tools
 

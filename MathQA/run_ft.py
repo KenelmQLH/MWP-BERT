@@ -313,7 +313,6 @@ if __name__=='__main__':
     # args.data_dir = "data"
     args.data_dir = f"data/{data_name}/{data_version}"
     args.output_dir = f"output/mwp-bert-en-{data_name}-{data_version}"
-    # args.bert_pretrain_path = "pretrained_models/bert-base-uncased"
     args.bert_pretrain_path = "pretrained_models/mwp-bert-en"
     # args.model_reload_path = "output/mwp-bert-en3/epoch_91"
     
