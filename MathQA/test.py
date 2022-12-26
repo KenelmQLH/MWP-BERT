@@ -179,15 +179,12 @@ if __name__=='__main__':
 
     parser.add_argument('--only_test_pred', action='store_true')
     parser.add_argument('--data_name', type=str, default='arithmetic')
-    
+    parser.add_argument('--data_version', type=int, default=97)
 
     args = parser.parse_args()
 
-    for arg in vars(args):
-        logger.info('{}: {}'.format(arg, getattr(args, arg)))
-    
-    data_name = "arithmetic"
-    data_version = 97
+    data_name = args.data_name
+    data_version = args.data_version
 
     args.data_dir = f"data/{data_name}/{data_version}"
     args.output_dir = f"output/mwp-bert-en-{data_name}-{data_version}"
@@ -197,7 +194,6 @@ if __name__=='__main__':
     args.train_file = f"{data_name}_train_mwp_format.json"
     args.dev_file = f"{data_name}_valid_mwp_format.json"
     # args.test_file = "/data/qlh/Math-Plan/output/planning1212_g7/{data_name}/version_0/checkpoints/infer_valid_mwp_format.json"
-
 
     args.schedule = "linear"
     args.batch_size = 2
@@ -213,7 +209,10 @@ if __name__=='__main__':
     args.dropout = 0.5
     args.seed = 17
     args.only_test = True
-
+    
+    for arg in vars(args):
+        logger.info('{}: {}'.format(arg, getattr(args, arg)))
+    
     if not os.path.exists(args.output_dir):
         os.makedirs(args.output_dir)
 

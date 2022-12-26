@@ -29,5 +29,5 @@ cd ..
 
 
 echo "[3] compute equation_acc for gold_ques and pred_ques ... "
-python test.py --test_file ${pred_data_dir}/infer_test_mwp_format.json --data_name $2
+python test.py --test_file ${pred_data_dir}/infer_test_mwp_format.json --data_name $2 --data_version $3
 # --only_test_pred

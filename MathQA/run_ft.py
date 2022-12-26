@@ -207,13 +207,18 @@ def train_model(args, train_pairs, test_pairs, generate_num_ids,
                     shutil.rmtree(os.path.join(args.output_dir, "epoch_{}".format(best_epoch_ls[min_pos])))
                 logger.info("saving best checkpoint")
                 best_epoch_ls[min_pos] = epoch
-                if os.path.exists(os.path.join(args.output_dir, "epoch_{}".format(epoch))):
+                if os.path.exists(os.path.join(args.output_dir, "epoch_{}")):
                      shutil.rmtree(os.path.join(args.output_dir, "epoch_{}".format(epoch)))
                 os.makedirs(os.path.join(args.output_dir, "epoch_{}".format(epoch)))
                 torch.save(encoder.state_dict(), os.path.join(args.output_dir, "epoch_{}".format(epoch), "encoder.ckpt"))
                 torch.save(predict.state_dict(), os.path.join(args.output_dir, "epoch_{}".format(epoch), "predict.ckpt"))
                 torch.save(generate.state_dict(), os.path.join(args.output_dir, "epoch_{}".format(epoch), "generate.ckpt"))
                 torch.save(merge.state_dict(), os.path.join(args.output_dir, "epoch_{}".format(epoch), "merge.ckpt"))
+                # 单独存一份最好的模型
+                torch.save(encoder.state_dict(), os.path.join(args.output_dir, "epoch_best", "encoder.ckpt"))
+                torch.save(predict.state_dict(), os.path.join(args.output_dir, "epoch_best", "predict.ckpt"))
+                torch.save(generate.state_dict(), os.path.join(args.output_dir, "epoch_best", "generate.ckpt"))
+                torch.save(merge.state_dict(), os.path.join(args.output_dir, "epoch_best", "merge.ckpt"))
     return best_metric
 
 def test_model(args, test_pairs, generate_num_ids, encoder, predict, generate, merge, output_lang, beam_size):
