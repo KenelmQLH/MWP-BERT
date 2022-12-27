@@ -294,20 +294,23 @@ def out_equation(test, output_lang, num_list, num_stack=None):
 
 
 def compute_prefix_tree_result2(test_res, test_tar, output_lang, num_list, num_stack):
-
-    test = out_expression_list(test_res, output_lang, num_list)
-    tar = out_expression_list(test_tar, output_lang, num_list, copy.deepcopy(num_stack))
+    try:
+        test = out_expression_list(test_res, output_lang, num_list)
+        tar = out_expression_list(test_tar, output_lang, num_list, copy.deepcopy(num_stack))
+        
+        res = () # val_ac, equ_ac
+        if len(num_stack) == 0 and test_res == test_tar:
+            # 表达式一样
+            res = (True, True)
+        elif test is None:
+            res = (False, False)
+        elif test == tar:
+            # 表达式一样
+            res = (True, True)
+    except:
+        print("parseError for expression list !!!")
+        return (False, False, [], [], 999, 999)
     
-    res = () # val_ac, equ_ac
-    if len(num_stack) == 0 and test_res == test_tar:
-        # 表达式一样
-        res = (True, True)
-    elif test is None:
-        res = (False, False)
-    elif test == tar:
-        # 表达式一样
-        res = (True, True)
-
     try:
         test_ans = compute_prefix_expression(test)
         tar_ans = compute_prefix_expression(tar)

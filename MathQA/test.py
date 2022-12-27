@@ -1,4 +1,5 @@
 # coding: utf-8
+import warnings
 from src.train_and_evaluate import *
 from src.models import *
 import time
@@ -56,6 +57,7 @@ def initial_model(output_lang, embedding_size, hidden_size, args, copy_nums, gen
     merge = Merge(hidden_size=hidden_size, embedding_size=embedding_size, dropout=args.dropout)
 
     if args.model_reload_path != '' and os.path.exists(args.model_reload_path):
+        logger.info("wtf !!!! ")
         encoder.load_state_dict(torch.load(os.path.join(args.model_reload_path, "encoder.ckpt")))
         pred = torch.load(os.path.join(args.model_reload_path, "predict.ckpt"))
         gene = torch.load(os.path.join(args.model_reload_path, "generate.ckpt"))
@@ -116,8 +118,9 @@ def test_model(args, test_pair, generate_num_ids, encoder, predict, generate, me
     for i, test_batch in tqdm(enumerate(test_pair)):
         test_res = evaluate_tree(test_batch[0], test_batch[1], generate_num_ids, encoder, predict, generate,
                                 merge, output_lang, test_batch[5], beam_size=beam_size)
-    
+        
         val_ac, equ_ac, test, tar, test_ans, tar_ans = compute_prefix_tree_result2(test_res, test_batch[2], output_lang, test_batch[4], test_batch[6])
+
         if save_test_path is not None:
             raw_data[i]["pred_equ"] = test
             raw_data[i]["gt_equ"] = tar
@@ -189,7 +192,7 @@ if __name__=='__main__':
     args.data_dir = f"data/{data_name}/{data_version}"
     args.output_dir = f"output/mwp-bert-en-{data_name}-{data_version}"
     args.bert_pretrain_path = "pretrained_models/mwp-bert-en"
-    args.model_reload_path = f"output/mwp-bert-en-{data_name}/epoch_best"
+    args.model_reload_path = f"output/mwp-bert-en-{data_name}-{data_version}/epoch_best"
 
     args.train_file = f"{data_name}_train_mwp_format.json"
     args.dev_file = f"{data_name}_valid_mwp_format.json"
@@ -213,6 +216,8 @@ if __name__=='__main__':
     for arg in vars(args):
         logger.info('{}: {}'.format(arg, getattr(args, arg)))
     
+    logger.info("wtf 1 ... ")
+
     if not os.path.exists(args.output_dir):
         os.makedirs(args.output_dir)
 
