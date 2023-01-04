@@ -1036,8 +1036,10 @@ def evaluate_tree(input_batch, input_length, generate_nums, encoder, predict, ge
                 out_score = nn.functional.log_softmax(torch.cat((op, num_score), dim=1), dim=1)
 
                 # out_score = p_leaf * out_score
-
-                topv, topi = out_score.topk(beam_size)
+                if len(out_score) < beam_size:
+                    topv, topi = out_score.topk(len(out_score))
+                else:
+                    topv, topi = out_score.topk(beam_size)
 
                 # is_leaf = int(topi[0])
                 # if is_leaf:
