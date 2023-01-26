@@ -1,4 +1,6 @@
 # coding: utf-8
+import os
+os.environ["CUDA_VISIBLE_DEVICES"]= "2"
 import warnings
 from src.train_and_evaluate import *
 from src.models import *
@@ -47,7 +49,7 @@ def make_pair(data, is_eval=False):
     pairs = temp_pairs
     return pairs, generate_nums, copy_nums
 
-def initial_model(output_lang, embedding_size, hidden_size, args, copy_nums, generate_nums):
+def initial_model(output_lang, embedding_size, hidden_size, args, copy_nums, generate_nums, device):
     encoder = EncoderBert(hidden_size=hidden_size, auto_transformer=False, 
                         bert_pretrain_path=args.bert_pretrain_path, dropout=args.dropout)
     predict = Prediction(hidden_size=hidden_size, op_nums=output_lang.n_words - copy_nums - 1 - len(generate_nums),
@@ -58,6 +60,7 @@ def initial_model(output_lang, embedding_size, hidden_size, args, copy_nums, gen
 
     if args.model_reload_path != '' and os.path.exists(args.model_reload_path):
         logger.info("wtf !!!! ")
+        # print("[deubg] encoder.device: ", encoder.device)
         encoder.load_state_dict(torch.load(os.path.join(args.model_reload_path, "encoder.ckpt")))
         pred = torch.load(os.path.join(args.model_reload_path, "predict.ckpt"))
         gene = torch.load(os.path.join(args.model_reload_path, "generate.ckpt"))
@@ -91,7 +94,7 @@ def initial_model(output_lang, embedding_size, hidden_size, args, copy_nums, gen
                 if constant not in from_output_lang.word2index:
                     const_emb = nn.Parameter(torch.randn(1, 1, hidden_size))
                     if USE_CUDA:
-                        const_emb = const_emb.cuda()
+                        const_emb = const_emb.to(device)
                 else:
                     from_idx = from_output_lang.word2index[constant] - from_output_lang.num_start
                     const_emb = pred["embedding_weight"][:,from_idx:from_idx+1,:]
@@ -183,11 +186,13 @@ if __name__=='__main__':
     parser.add_argument('--only_test_pred', action='store_true')
     parser.add_argument('--data_name', type=str, default='arithmetic')
     parser.add_argument('--data_version', type=int, default=97)
+    parser.add_argument('-gpu', type=int, default=0)
 
     args = parser.parse_args()
 
     data_name = args.data_name
     data_version = args.data_version
+    device = f"cuda:{args.gpu}"
 
     args.data_dir = f"data/{data_name}/{data_version}"
     args.output_dir = f"output/mwp-bert-en-{data_name}-{data_version}"
@@ -255,12 +260,12 @@ if __name__=='__main__':
     for num in generate_nums:
         generate_num_ids.append(output_lang.word2index[num])
 
-    encoder, predict, generate, merge = initial_model(output_lang, embedding_size, hidden_size, args, copy_nums, generate_nums)
+    encoder, predict, generate, merge = initial_model(output_lang, embedding_size, hidden_size, args, copy_nums, generate_nums, device)
     if torch.cuda.is_available():
-        encoder.cuda()
-        predict.cuda()
-        generate.cuda()
-        merge.cuda()
+        encoder.to(device)
+        predict.to(device)
+        generate.to(device)
+        merge.to(device)
 
     if not args.only_test_pred:
         # 测试 gold_ques

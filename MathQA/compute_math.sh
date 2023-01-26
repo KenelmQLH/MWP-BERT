@@ -1,9 +1,8 @@
 #!/bin/bash
 
 pred_data_dir=$1
-data_name=$2 # arithmetic
-data_version=$3 # 97
-
+data_name=arithmetic
+data_version=97
 
 CRTDIR=$(pwd)
 gold_data_file=${CRTDIR}/data/${data_name}/${data_version}/${data_name}_test_mwp_format.json
@@ -29,5 +28,5 @@ cd ..
 
 
 echo "[3] compute equation_acc for gold_ques and pred_ques ... "
-python test.py --test_file ${pred_data_dir}/infer_test_mwp_format.json --data_name $2 --data_version $3
+python test.py --test_file ${pred_data_dir}/infer_test_mwp_format.json --data_name ${data_name} --data_version ${data_version}
 # --only_test_pred

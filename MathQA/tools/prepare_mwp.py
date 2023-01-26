@@ -44,7 +44,7 @@ def recover_prediction_for_mwp_bert(items):
         equation = item["equations"][0]
         mwp_data.append({
             "original_text": original_text,
-            "equation": equation,
+            "equation": equation.replace(" ", ""),
             "ans": str(item["answer"][0])
         })
     return mwp_data
@@ -88,6 +88,9 @@ work_mode = work_opt.work_mode
 def main():
     # data = load_raw_data(src_data_path)
     data = read_json(src_data_path)
+    for item in data:
+        item["equation"] = item["equation"].replace(" ", "")
+
     if work_mode == "gold":
         data = handle_gold(data)
 
